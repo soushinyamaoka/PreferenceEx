@@ -1,4 +1,4 @@
-package com.example.soushinyamaoka.preferenceex;
+package com.example.syama.preferenceex;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

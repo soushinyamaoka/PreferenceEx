@@ -1,4 +1,4 @@
-package com.example.soushinyamaoka.preferenceex;
+package com.example.syama.preferenceex;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,8 +19,7 @@ import java.io.OutputStream;
  * Created by SoushinYamaoka on 2018/02/03.
  */
 //ファイルの読み書き
-public class FileEx extends Activity{
-    implements View.OnClickListener{
+public class FileEx extends Activity implements View.OnClickListener{
         private final static int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
         private final static int MP = ViewGroup.LayoutParams.MATCH_PARENT;
         private final static String TAG_WRITE = "write";
@@ -109,15 +107,15 @@ public class FileEx extends Activity{
         int size;
         byte[] w = new byte[1024];
         InputStream in = null;
-        ByteArrayInputStream out = null;
+        ByteArrayOutputStream out = null;
         try{
 //          ファイル入力ストリームのオープン
             in = context.openFileInput(fileName);
 
 //            バイト配列の読み込み
             out = new ByteArrayOutputStream();
-            write(true){
-                siza = in.read(w);
+            while(true){
+                size = in.read(w);
                 if(size <= 0)break;
                 out.write(w, 0, size);
             }
