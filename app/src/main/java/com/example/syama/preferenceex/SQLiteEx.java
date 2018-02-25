@@ -28,7 +28,7 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
     private final static String DB_TABLE = "test";//テーブル名
     private final static int    DB_VERSION = 1;   //バージョン
 
-    private EditText    editText; //エディットテキスト
+    private EditText editText; //エディットテキスト
     private SQLiteDatabase db;    //データベースオブジェクト
 
     //アクティビティ起動時に呼ばれる
@@ -66,18 +66,18 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
     public void onClick(View v){
         String tag = (String)v.getTag();
         //DBへの書き込み
-        if (TAG_WRITE.equals(tag)){
+        if (TAG_WRITE.equals(tag)){//書き込みが選択された場合
             try{
-                String str = editText.getText().toString();
-                writeDB(str);
-            }catch(Exception e){
+                String str = editText.getText().toString();//書き込まれた内容(getText)をstrに格納
+                writeDB(str);//writeDBメソッドを呼び出し、strを引数として渡す
+            }catch(Exception e){//エラーの場合
                 editText.setText("書き込み失敗しました");
             }
         }
         //DBからの読み込み
-        else if(TAG_READ.equals(tag)){
+        else if(TAG_READ.equals(tag)){//読み込みが選択された場合
             try{
-                String str = readDB();
+                String str = readDB();//readDBメソッドをstrに格納
                 editText.setText(str);
             }catch(Exception e){
                 editText.setText("書き込み失敗しました");
@@ -109,7 +109,7 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
     private static class DBHelper extends SQLiteOpenHelper {
         //データベースヘルパーのコンストラクタ
         public DBHelper(Context context){
-            super(context, DB_NAME, null, DB_VERSION);
+            super(context, DB_NAME, null, DB_VERSION); //DB名、テーブル名、DBバージョンを定数として保持している
         }
 
         //データベースの生成

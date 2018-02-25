@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-//プリファレンスの読み書き
+//プリファレンスの読み書き　プリファレンスは、データを、キー名と値の組み合わせで保存する形をとります。
+//Androidアプリでは、いくつかのデータ保存方法が用意されていますが、最も簡単に扱える方法が、この「プリファレンス(Preference)」であると思います。
 public class PreferenceEx extends Activity
     implements View.OnClickListener{
     private final static int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -56,18 +57,24 @@ public class PreferenceEx extends Activity
     public void onClick(View v){
         String tag = (String)v.getTag();
 //        プリファレンスオブジェクトの取得
-        SharedPreferences pref = getSharedPreferences(
+        SharedPreferences pref = getSharedPreferences(//
                 "PreferencesEx", MODE_PRIVATE);
+        //getSharedPreferences()の1つめの引数は生成する設定ファイルのキー（つまりファイル名のようなもの）
+          //これはアプリ内で固有のものである必要があります。
+        //2つめの引数はこの設定ファイルが自分のアプリ内のみからアクセス可能か、他のアプリからも読み書きが出来るかを設定する定数です。
+          //MODE_WORLD_READABLE：他のアプリから読み取り可能 MODE_WORLD_WRITEABLE：他のアプリから書込み可能　MODE_PRIVATE：そのアプリケーションだけで使用可能
 
 //        プリファレンスへの書き込み
-        if(TAG_WRITE.equals(tag)){
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("text", editText.getText().toString());
-            editor.commit();
+        if(TAG_WRITE.equals(tag)){//書き込みが選択された場合
+            SharedPreferences.Editor editor = pref.edit();//SharedPreferences.Editorオブジェクトを取得。メソッドを使ってデータの保存をすることができます。
+            editor.putString("text", editText.getText().toString());//「text」に「editText.getText().toString()」を保存
+            editor.commit();//保存を反映。commit()は同期処理でapply()は非同期処理
         }
 //        プリファレンスからの読み込み
-        else if(TAG_READ.equals(tag)){
+        else if(TAG_READ.equals(tag)){//読み込みが選択された場合
             editText.setText(pref.getString("text", ""));
+            //1つめの引数はプリファレンスオブジェクトの取得時に指定した設定ファイルのキー
+            // 2つめの引数はもしそのキーに値が存在しないときに代入する初期値
         }
     }
 }
