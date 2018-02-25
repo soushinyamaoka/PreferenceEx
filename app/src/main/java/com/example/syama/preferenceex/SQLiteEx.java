@@ -43,6 +43,12 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
         layout.setOrientation(LinearLayout.VERTICAL);
         setContentView(layout);
 
+        //        エディットテキストの生成
+        editText = new EditText(this);
+        editText.setText("これはテストです");
+        editText.setLayoutParams(new LinearLayout.LayoutParams(MP, WC));
+        layout.addView(editText);
+
         //ボタンの生成
         layout.addView(makeButton("書き込み", TAG_WRITE));
         layout.addView(makeButton("読み込み", TAG_READ));
@@ -78,7 +84,7 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
         else if(TAG_READ.equals(tag)){//読み込みが選択された場合
             try{
                 String str = readDB();//readDBメソッドをstrに格納
-                editText.setText(str);
+                editText.setText(str);//strをeditTextで表示
             }catch(Exception e){
                 editText.setText("書き込み失敗しました");
             }
@@ -87,19 +93,23 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
 
     //データベースへの書き込み
     private void writeDB(String info) throws Exception{
-        ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();//値を格納するためのvaluesを宣言
         values.put("id", "0");
         values.put("info", info);
         int colNum = db.update(DB_TABLE, values, null, null);
         if(colNum == 0)db.insert(DB_TABLE, "", values);
+        //上記はINSERT INTO DB_TABLE (id, 0) VALUES("info", info);と同じ処理をしている
     }
 
     //データベースからの読み込み
     private String readDB() throws Exception{
-        Cursor c = db.query(DB_TABLE, new String[]{"id", "info"},
+        Cursor c = db.query(DB_TABLE, new String[]{"id", "info"},//query()メソッドを使用してデータ検索をする
                 "id='0'", null, null, null,null);
-        if(c.getCount() == 0)throw new Exception();
-        c.moveToFirst();
+        //query()の第一引数にはテーブル名、第二引数には取得対象のカラム名を配列の形で指定する。
+        //第三引数以降は取得条件(like演算子など)やgroup by句、order by句を指定する。今回はorder by句のみ指定して、あとはnull
+        //検索した結果はcに格納される
+        if(c.getCount() == 0)throw new Exception();//全件取得する場合は、moveToFirst()メソッドを使用
+        c.moveToFirst();                           //確実にcursor内のデータ参照先を先頭に持ってくる。
         String str = c.getString(1);
         c.close();
         return str;
@@ -113,8 +123,8 @@ public class SQLiteEx extends Activity implements View.OnClickListener {
         }
 
         //データベースの生成
-        @Override
-        public  void onCreate(SQLiteDatabase db){
+        //@Override
+        public void onCreate(SQLiteDatabase db){
             db.execSQL("create table if not exists " +
                     DB_TABLE + "(id text primary key,info text)");
         }
